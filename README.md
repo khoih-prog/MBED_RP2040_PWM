@@ -26,7 +26,7 @@
 * [Usage](#usage)
   * [1. Prepare PWM settings](#1-Prepare-PWM-settings)
   * [2. Set PWM Frequency and dutycycle](#2-Set-PWM-Frequency-and-dutycycle)
-  * [3. Read actual PWM Parameters](#2-Read-actual-PWM-Parameters) 
+  * [3. Read actual PWM Parameters](#3-Read-actual-PWM-Parameters) 
 * [Examples](#examples)
   * [ 1. PWM_Multi](examples/PWM_Multi)
   * [ 2. PWM_Single](examples/PWM_Single)
