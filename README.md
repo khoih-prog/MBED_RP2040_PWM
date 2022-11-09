@@ -55,6 +55,22 @@
 
 This library enables you to use Hardware-based PWM to create and output PWM to pins on **MBED RP2040-based boards such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**, using [**Arduino-mbed mbed_rp2040 or mbed_nano** core](https://github.com/arduino/ArduinoCore-mbed)
 
+This library is using the **same or similar functions** as other FastPWM libraries, as follows, to enable you to **port your PWM code easily between platforms**
+
+- [**RP2040_PWM**](https://github.com/khoih-prog/RP2040_PWM)
+- [**AVR_PWM**](https://github.com/khoih-prog/AVR_PWM)
+- [**megaAVR_PWM**](https://github.com/khoih-prog/megaAVR_PWM)
+- [**ESP32_FastPWM**](https://github.com/khoih-prog/ESP32_FastPWM)
+- [**SAMD_PWM**](https://github.com/khoih-prog/SAMD_PWM)
+- [**SAMDUE_PWM**](https://github.com/khoih-prog/SAMDUE_PWM)
+- [**nRF52_PWM**](https://github.com/khoih-prog/nRF52_PWM)
+- [**ATtiny_PWM**](https://github.com/khoih-prog/ATtiny_PWM)
+- [**Portenta_H7_PWM**](https://github.com/khoih-prog/Portenta_H7_PWM)
+- [**MBED_RP2040_PWM**](https://github.com/khoih-prog/MBED_RP2040_PWM)
+- [**nRF52_MBED_PWM**](https://github.com/khoih-prog/nRF52_MBED_PWM)
+- [**STM32_PWM**](https://github.com/khoih-prog/STM32_PWM)
+
+
 ---
 
 The most important feature is they're purely `hardware-based PWM` channels. Therefore, the frequency can be higher than `hybrid or software-based PWM`, and their executions are **not blocked by bad-behaving functions / tasks**. This important feature is absolutely necessary for mission-critical tasks.
@@ -78,7 +94,7 @@ This non-being-blocked important feature is absolutely necessary for mission-cri
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`Arduino mbed_rp2040 core 2.7.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+ 2. [`Arduino mbed_rp2040 core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 ---
 ---
 
