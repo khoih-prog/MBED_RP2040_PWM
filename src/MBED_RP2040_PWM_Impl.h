@@ -32,9 +32,9 @@ bool isValidPWMPin(const pin_size_t& pin)
   {
     return true;
   }
-  
+
   PWM_LOGERROR1("Not PWM pin = ", pin);
-  
+
   return false;
 }
 
@@ -43,7 +43,7 @@ bool isValidPWMDutyCycle(const pin_size_t& pin, const float& dutyCycle)
   if ( (dutyCycle < 0.0f) || (dutyCycle > 100.0f) )
   {
     PWM_LOGERROR3("Bad dutyCycle = ", dutyCycle, ", pin = ", pin);
-    
+
     return false;
   }
 
@@ -59,53 +59,54 @@ bool isValidPWMFreq(const pin_size_t& pin, const float& frequency)
 
     return false;
   }
-  
+
   return true;
 }
 
 bool isValidPWMSettings(const pin_size_t& pin, const float& frequency, const float& dutyCycle)
 {
   if ( !isValidPWMPin(pin) || !isValidPWMFreq(pin, frequency) || !isValidPWMDutyCycle(pin, dutyCycle) )
-  { 
+  {
     return false;
-  } 
-  
+  }
+
   return true;
 }
 
 // dutyCycle from 0.0f to 100.0f
 mbed::PwmOut* setPWM(mbed::PwmOut* &pwm, const pin_size_t& pin, const float& frequency, const float& dutyCycle)
 {
-  PWM_LOGDEBUG7("Freq = ", frequency, ", \tDutyCycle = ", dutyCycle, ", \tDutyCycle % = ", dutyCycle / 100, ", \tPin = ", pin);
-    
+  PWM_LOGDEBUG7("Freq = ", frequency, ", \tDutyCycle = ", dutyCycle, ", \tDutyCycle % = ", dutyCycle / 100, ", \tPin = ",
+                pin);
+
   if ( !isValidPWMSettings(pin, frequency, dutyCycle) )
-  {   
+  {
     return NULL;
   }
 
   float percent = dutyCycle / 100.0f;
-  
+
   if (digitalPinToPwm(pin) == NULL)
   {
     PWM_LOGDEBUG("New pwm");
-    
+
     pwm = new mbed::PwmOut(digitalPinToPinName(pin));
-    
+
     digitalPinToPwm(pin) = pwm;
 
-    pwm->period_us( 1000000.0f/frequency );  
+    pwm->period_us( 1000000.0f / frequency );
 
     pwm->write(percent);
   }
   else if (pwm && (digitalPinToPwm(pin) == pwm) )
   {
     PWM_LOGDEBUG("Use existing pwm");
-    
-    pwm->period_us( 1000000.0f/frequency );  
+
+    pwm->period_us( 1000000.0f / frequency );
 
     pwm->write(percent);
   }
-  
+
   return pwm;
 }
 

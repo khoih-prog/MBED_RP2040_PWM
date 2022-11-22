@@ -2,11 +2,17 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/MBED_RP2040_PWM.svg?)](https://www.ardu-badge.com/MBED_RP2040_PWM)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/MBED_RP2040_PWM.svg)](https://github.com/khoih-prog/MBED_RP2040_PWM/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/MBED_RP2040_PWM/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/MBED_RP2040_PWM/blob/main/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/MBED_RP2040_PWM.svg)](http://github.com/khoih-prog/MBED_RP2040_PWM/issues)
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 181px !important;" ></a>
+
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-MBED_RP2040_PWM/count.svg" title="MBED_RP2040_PWM Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-MBED_RP2040_PWM/count.svg" style="height: 30px;width: 200px;"></a>
+
+
 
 ---
 ---
@@ -112,9 +118,9 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 Another way to install is to:
 
 1. Navigate to [**MBED_RP2040_PWM**](https://github.com/khoih-prog/MBED_RP2040_PWM) page.
-2. Download the latest release `MBED_RP2040_PWM-master.zip`.
-3. Extract the zip file to `MBED_RP2040_PWM-master` directory 
-4. Copy whole `MBED_RP2040_PWM-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+2. Download the latest release `MBED_RP2040_PWM-main.zip`.
+3. Extract the zip file to `MBED_RP2040_PWM-main` directory 
+4. Copy whole `MBED_RP2040_PWM-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
@@ -133,14 +139,14 @@ The current library implementation, using `xyz-Impl.h` instead of standard `xyz.
 
 You can include this `.hpp` file
 
-```
+```cpp
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error
 #include "MBED_RP2040_PWM.hpp"    //https://github.com/khoih-prog/MBED_RP2040_PWM
 ```
 
 in many files. But be sure to use the following `.h` file **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
-```
+```cpp
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "MBED_RP2040_PWM.h"      //https://github.com/khoih-prog/MBED_RP2040_PWM
 ```
@@ -156,7 +162,7 @@ Before using any Timer for a PWM channel, you have to make sure the Timer has no
 
 ### 1. Prepare PWM settings
 
-```
+```cpp
 // Valid pins from 0-29 (GP0-GP29)
 uint32_t myPin  = 15;    // GP15
 
@@ -169,7 +175,7 @@ mbed::PwmOut* pwm   = NULL;
 
 #### 2. Set PWM Frequency and dutycycle
 
-```
+```cpp
 void setup()
 {
   ....
@@ -182,7 +188,7 @@ void setup()
 
 Use these functions
 
-```
+```cpp
 float getFreq(mbed::PwmOut* &pwm);
 
 float getDutyCycle(mbed::PwmOut* &pwm);
@@ -194,7 +200,7 @@ float getPeriod_uS(mbed::PwmOut* &pwm);
 
 For example
 
-```
+```cpp
 // Valid pins from 0-29 (GP0-GP29)
 uint32_t myPin  = 15;    // GP15
 
@@ -229,7 +235,7 @@ if (pwm)
 
 ### Example [PWM_Multi](examples/PWM_Multi)
 
-```
+```cpp
 #if !( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || \
       defined(ARDUINO_GENERIC_RP2040) ) && defined(ARDUINO_ARCH_MBED)
   #error This code is intended to run on the MBED RP2040 platform! Please check your Tools->Board setting.
@@ -463,7 +469,7 @@ void loop()
 The following is the sample terminal output when running example [PWM_Single](examples/PWM_Single) on **RaspberryPi Pico** to demonstrate how to start a single PWM channel, then stop, change, restore the PWM settings on-the-fly.
 
 
-```
+```cpp
 Starting PWM_Single on RaspberryPi Pico
 MBED_RP2040_PWM v1.0.0
 [PWM] Freq = 5000.00, DutyCycle % = 50.00, DutyCycle = 0.50, Pin = 15
@@ -495,7 +501,7 @@ Change PWM
 
 The following is the sample terminal output when running example [**PWM_Multi**](examples/PWM_Multi) on **RaspberryPi Pico** to demonstrate how to start multiple PWM channels, then stop, change, restore the PWM settings on-the-fly.
 
-```
+```cpp
 Starting PWM_Multi on RaspberryPi Pico
 MBED_RP2040_PWM v1.0.0
 [PWM] Freq = 1000.00, 	DutyCycle % = 50.00, 	DutyCycle = 0.50, 	Pin = GP12
@@ -600,12 +606,12 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [MIT](https://github.com/khoih-prog/MBED_RP2040_PWM/blob/master/LICENSE)
+- The library is licensed under [MIT](https://github.com/khoih-prog/MBED_RP2040_PWM/blob/main/LICENSE)
 
 ---
 
 ## Copyright
 
-Copyright 2022- Khoi Hoang
+Copyright (c) 2022- Khoi Hoang
 
 

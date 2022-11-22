@@ -9,7 +9,7 @@
 
 #if !( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || \
       defined(ARDUINO_GENERIC_RP2040) ) && defined(ARDUINO_ARCH_MBED)
-  #error This code is intended to run on the MBED RP2040 platform! Please check your Tools->Board setting.
+#error This code is intended to run on the MBED RP2040 platform! Please check your Tools->Board setting.
 #endif
 
 #define _PWM_LOGLEVEL_       1
@@ -60,10 +60,10 @@ void restorePWM()
   digitalWrite(LED_BUILTIN, LED_ON);
   digitalWrite(LED_BLUE, LED_OFF);
   digitalWrite(LED_RED, LED_OFF);
-  
+
   curFreq      = freq;
   curDutyCycle = dutyCycle;
-  
+
   // setPWM(mbed::PwmOut* &pwm, pinsize_t pin, float frequency, float dutyCycle)
   setPWM(pwm, myPin, freq, dutyCycle);
 }
@@ -73,10 +73,10 @@ void changePWM()
   digitalWrite(LED_BUILTIN, LED_OFF);
   digitalWrite(LED_BLUE, LED_ON);
   digitalWrite(LED_RED, LED_OFF);
-  
+
   curFreq      = freq * 2;
   curDutyCycle = dutyCycle / 2;
-  
+
   // setPWM(mbed::PwmOut* &pwm, pinsize_t pin, float frequency, float dutyCycle)
   setPWM(pwm, myPin, curFreq, curDutyCycle);
 }
@@ -86,10 +86,10 @@ void stopMyPWM()
   digitalWrite(LED_BUILTIN, LED_OFF);
   digitalWrite(LED_BLUE, LED_OFF);
   digitalWrite(LED_RED, LED_ON);
-  
+
   curFreq      = 1000.0f;
   curDutyCycle = 0.0f;
-  
+
   //stopPWM(mbed::PwmOut* &pwm, pinsize_t pin)
   stopPWM(pwm, myPin);
 }
@@ -106,18 +106,20 @@ void printPulseWidth()
   if (num++ % 50 == 0)
   {
     printLine();
-    
+
     Serial.print(F("PW (us)\t\tDutyCycle\tPeriod (uS)"));
 
     printLine();
   }
- 
+
   if (num > 1)
   {
     if (pwm)
     {
-      Serial.print(getPulseWidth_uS(pwm)); Serial.print(F("\t\t"));
-      Serial.print(getDutyCycle(pwm)); Serial.print(F("\t\t"));
+      Serial.print(getPulseWidth_uS(pwm));
+      Serial.print(F("\t\t"));
+      Serial.print(getDutyCycle(pwm));
+      Serial.print(F("\t\t"));
       Serial.print(getPeriod_uS(pwm));
     }
 
@@ -145,10 +147,10 @@ void check_status()
 
   if ( (millis() > changePWM_timeout) && (millis() > CHANGE_INTERVAL) )
   {
-    
+
     if (PWM_orig)
     {
-      if (count++ %2 == 0)
+      if (count++ % 2 == 0)
       {
         Serial.println("Stop PWM");
         stopMyPWM();
@@ -156,7 +158,7 @@ void check_status()
       else
       {
         Serial.println("Change PWM");
-        
+
         changePWM();
 
         PWM_orig = !PWM_orig;
@@ -165,12 +167,12 @@ void check_status()
     else
     {
       Serial.println("Restore PWM");
-      
+
       restorePWM();
 
       PWM_orig = !PWM_orig;
     }
-      
+
     changePWM_timeout = millis() + CHANGE_INTERVAL;
   }
 }
@@ -189,11 +191,13 @@ void setup()
   digitalWrite(myPin, LOW);
 
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(100);
 
-  Serial.print(F("\nStarting PWM_Single on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStarting PWM_Single on "));
+  Serial.println(BOARD_NAME);
   Serial.println(MBED_RP2040_PWM_VERSION);
 
   // Automatically retrieve TIM instance and channel associated to pin
