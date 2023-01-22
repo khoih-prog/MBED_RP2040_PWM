@@ -33,7 +33,8 @@
 * [Examples](#examples)
   * [ 1. PWM_Multi](examples/PWM_Multi)
   * [ 2. PWM_Single](examples/PWM_Single)
-  * [ 3. multiFileProject](examples/multiFileProject). **New**
+  * [ 3. multiFileProject](examples/multiFileProject)
+  * [ 4. PWM_StepperControl](examples/PWM_StepperControl). **New**
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_Single on RaspberryPi Pico](#1-PWM_Single-on-RaspberryPi-Pico)
@@ -99,7 +100,7 @@ This non-being-blocked important feature is absolutely necessary for mission-cri
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`Arduino mbed_rp2040 core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+ 2. [`Arduino mbed_rp2040 core 3.5.4+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 ---
 ---
 
@@ -224,7 +225,8 @@ if (pwm)
 
  1. [PWM_Multi](examples/PWM_Multi)
  2. [PWM_Single](examples/PWM_Single)
- 3. [**multiFileProject**](examples/multiFileProject) **New**
+ 3. [**multiFileProject**](examples/multiFileProject)
+ 4. [**PWM_StepperControl**](examples/PWM_StepperControl) **New**
 
  
 ---
@@ -232,230 +234,9 @@ if (pwm)
 
 ### Example [PWM_Multi](examples/PWM_Multi)
 
-```cpp
-#if !( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || \
-      defined(ARDUINO_GENERIC_RP2040) ) && defined(ARDUINO_ARCH_MBED)
-  #error This code is intended to run on the MBED RP2040 platform! Please check your Tools->Board setting.
-#endif
+https://github.com/khoih-prog/MBED_RP2040_PWM/blob/97018ae974e1f1dab9e77b4967ee7726b60b74c1/examples/PWM_Multi/PWM_Multi.ino#L10-L237
 
-#define _PWM_LOGLEVEL_       1
 
-// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include "MBED_RP2040_PWM.h"
-
-#define LED_ON        LOW
-#define LED_OFF       HIGH
-
-#ifndef LED_BUILTIN
-  #define LED_BUILTIN       25
-#endif
-
-#ifndef LED_BLUE
-  #define LED_BLUE          10
-#endif
-
-#ifndef LED_RED
-  #define LED_RED           11
-#endif
-
-// Valid pins from 0-29 (GP0-GP29)
-uint32_t pins[]       = { 12, 13, 14, 15 };
-
-#define NUM_OF_PINS       ( sizeof(pins) / sizeof(uint32_t) )
-
-float dutyCycle[]      = { 50.0f, 50.0f, 50.0f, 50.0f };
-
-float freq[]           = { 1000.0f, 2500.0f, 4000.0f, 5000.0f };
-
-float curDutyCycle[]   = { 50.0f, 50.0f, 50.0f, 50.0f };
-
-float curFreq[]        = { 1000.0f, 2500.0f, 4000.0f, 5000.0f };
-
-mbed::PwmOut* pwm[]    = { NULL, NULL, NULL, NULL };
-
-void startAllPWM()
-{
-  digitalWrite(LED_BUILTIN, LED_ON);
-  digitalWrite(LED_BLUE, LED_OFF);
-  digitalWrite(LED_RED, LED_OFF);
-  
-  for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-  {
-    PWM_LOGERROR7("Freq = ", freq[index], ", \tDutyCycle % = ", dutyCycle[index], ", \tDutyCycle = ", dutyCycle[index] / 100, ", \tPin = GP", pins[index]);
-    
-    // setPWM(mbed::PwmOut* &pwm, pinsize_t pin, float frequency, float dutyCycle)
-    setPWM(pwm[index], pins[index], freq[index], dutyCycle[index]);
-  }
-}
-
-void restoreAllPWM()
-{
-  digitalWrite(LED_BUILTIN, LED_ON);
-  digitalWrite(LED_BLUE, LED_OFF);
-  digitalWrite(LED_RED, LED_OFF);
-  
-  for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-  {
-    curFreq[index]      = freq[index];
-    curDutyCycle[index] = dutyCycle[index];
-    
-    // setPWM(mbed::PwmOut* &pwm, pinsize_t pin, float frequency, float dutyCycle)
-    setPWM(pwm[index], pins[index], freq[index], dutyCycle[index]);
-  }
-}
-
-void changeAllPWM()
-{
-  digitalWrite(LED_BUILTIN, LED_OFF);
-  digitalWrite(LED_BLUE, LED_ON);
-  digitalWrite(LED_RED, LED_OFF);
-  
-  for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-  {
-    curFreq[index]      = freq[index] * 2;
-    curDutyCycle[index] = dutyCycle[index] / 2;
-    
-    // setPWM(mbed::PwmOut* &pwm, pinsize_t pin, float frequency, float dutyCycle)
-    setPWM(pwm[index], pins[index], curFreq[index], curDutyCycle[index]);
-  }
-}
-
-void stopAllPWM()
-{
-  digitalWrite(LED_BUILTIN, LED_OFF);
-  digitalWrite(LED_BLUE, LED_OFF);
-  digitalWrite(LED_RED, LED_ON);
-  
-  for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-  {
-    curFreq[index]      = 1000.0f;
-    curDutyCycle[index] = 0.0f;
-    
-    //stopPWM(mbed::PwmOut* &pwm, pinsize_t pin)
-    stopPWM(pwm[index], pins[index]);
-  }
-}
-
-void printLine()
-{
-  Serial.println(F("\n========================================================="));
-}
-
-void printPulseWidth()
-{
-  static uint32_t num = 0;
-
-  if (num++ % 50 == 0)
-  {
-    printLine();
-    
-    for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-    {
-      Serial.print(F("PW (us) ")); Serial.print(index); Serial.print(F("\t"));  
-    }
-
-    printLine();
-  }
- 
-  if (num > 1)
-  {
-    for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-    {
-      if (pwm[index])
-      {
-        Serial.print(getPulseWidth_uS(pwm[index])); Serial.print(F("\t\t"));
-      }
-    }
-
-    Serial.println();
-  }
-}
-
-#define PRINT_INTERVAL      10000L
-#define CHANGE_INTERVAL     20000L
-
-void check_status()
-{
-  static unsigned long checkstatus_timeout  = 0;
-  static unsigned long changePWM_timeout    = 0;
-
-  static bool PWM_orig  = true;
-  static uint32_t count = 0;
-
-  // Print every PRINT_INTERVAL (10) seconds.
-  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
-  {
-    printPulseWidth();
-    checkstatus_timeout = millis() + PRINT_INTERVAL;
-  }
-
-  if ( (millis() > changePWM_timeout) && (millis() > CHANGE_INTERVAL) )
-  {
-    
-    if (PWM_orig)
-    {
-      if (count++ %2 == 0)
-      {
-        Serial.println("Stop all PWM");
-        stopAllPWM();
-      }
-      else
-      {
-        Serial.println("Change all PWM");
-        
-        changeAllPWM();
-
-        PWM_orig = !PWM_orig;
-      }
-    }
-    else
-    {
-      Serial.println("Restore all PWM");
-      
-      restoreAllPWM();
-
-      PWM_orig = !PWM_orig;
-    }
-      
-    changePWM_timeout = millis() + CHANGE_INTERVAL;
-  }
-}
-
-void setup()
-{
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(LED_BLUE, OUTPUT);
-  pinMode(LED_RED, OUTPUT);
-
-  digitalWrite(LED_BUILTIN, LED_OFF);
-  digitalWrite(LED_BLUE, LED_OFF);
-  digitalWrite(LED_RED, LED_OFF);
-
-  for (uint8_t index = 0; index < NUM_OF_PINS; index++)
-  {
-    pinMode(pins[index], OUTPUT);
-    digitalWrite(pins[index], LOW);
-  }
-
-  Serial.begin(115200);
-  while (!Serial);
-
-  delay(100);
-
-  Serial.print(F("\nStarting PWM_Multi on ")); Serial.println(BOARD_NAME);
-  Serial.println(MBED_RP2040_PWM_VERSION);
-
-  // Automatically retrieve TIM instance and channel associated to pin
-  // This is used to be compatible with all STM32 series automatically.
-
-  startAllPWM();
-}
-
-void loop()
-{
-  check_status();
-}
-```
 ---
 ---
 
@@ -468,7 +249,7 @@ The following is the sample terminal output when running example [PWM_Single](ex
 
 ```cpp
 Starting PWM_Single on RaspberryPi Pico
-MBED_RP2040_PWM v1.0.0
+MBED_RP2040_PWM v1.0.1
 [PWM] Freq = 5000.00, DutyCycle % = 50.00, DutyCycle = 0.50, Pin = 15
 
 ============================================
@@ -500,7 +281,7 @@ The following is the sample terminal output when running example [**PWM_Multi**]
 
 ```cpp
 Starting PWM_Multi on RaspberryPi Pico
-MBED_RP2040_PWM v1.0.0
+MBED_RP2040_PWM v1.0.1
 [PWM] Freq = 1000.00, 	DutyCycle % = 50.00, 	DutyCycle = 0.50, 	Pin = GP12
 [PWM] Freq = 2500.00, 	DutyCycle % = 50.00, 	DutyCycle = 0.50, 	Pin = GP13
 [PWM] Freq = 4000.00, 	DutyCycle % = 50.00, 	DutyCycle = 0.50, 	Pin = GP14
@@ -578,8 +359,9 @@ Submit issues to: [MBED_RP2040_PWM issues](https://github.com/khoih-prog/MBED_RP
 3. Permit to start, stop, modify, restore PWM settings on-the-fly
 4. Optimize library code by using `reference-passing` instead of `value-passing`
 5. Use `h-only` style
-6. Add functions to read PWM parameters.
-
+6. Add functions to read PWM parameters
+7. Use `allman astyle` and add `utils`
+8. Add example [PWM_StepperControl](https://github.com/khoih-prog/Portenta_H7_PWM/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
 
 ---
 ---
@@ -587,6 +369,14 @@ Submit issues to: [MBED_RP2040_PWM issues](https://github.com/khoih-prog/MBED_RP
 ### Contributions and Thanks
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
+
+1. Thanks to [Paul van Dinther](https://github.com/dinther) for proposing new way to use PWM to drive Stepper-Motor in [Using PWM to step a stepper driver #16](https://github.com/khoih-prog/RP2040_PWM/issues/16), leading to v1.0.1
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/dinther"><img src="https://github.com/dinther.png" width="100px;" alt="dinther"/><br /><sub><b>Paul van Dinther</b></sub></a><br /></td>
+  </tr>
+</table>
 
 ---
 
