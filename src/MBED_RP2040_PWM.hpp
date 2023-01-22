@@ -6,11 +6,12 @@
   Built by Khoi Hoang https://github.com/khoih-prog/MBED_RP2040_PWM
   Licensed under MIT license
 
-  Version: 1.0.0
+  Version: 1.0.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K.Hoang      09/02/2022 Initial coding for RP2040 using ArduinoCore-mbed mbed_rp2040 core
+  1.0.1   K.Hoang      21/01/2023 Add `PWM_StepperControl` example
 *****************************************************************************************************************************/
 
 #pragma once
@@ -24,13 +25,13 @@
 #endif
 
 #ifndef MBED_RP2040_PWM_VERSION
-  #define MBED_RP2040_PWM_VERSION             "MBED_RP2040_PWM v1.0.0"
+  #define MBED_RP2040_PWM_VERSION             "MBED_RP2040_PWM v1.0.1"
   
   #define MBED_RP2040_PWM_VERSION_MAJOR       1
   #define MBED_RP2040_PWM_VERSION_MINOR       0
-  #define MBED_RP2040_PWM_VERSION_PATCH       0
+  #define MBED_RP2040_PWM_VERSION_PATCH       1
 
-  #define MBED_RP2040_PWM_VERSION_INT         1000000
+  #define MBED_RP2040_PWM_VERSION_INT         1000001
 #endif
 
 
